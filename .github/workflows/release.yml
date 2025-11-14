@@ -1,0 +1,37 @@
+# .github/workflows/release-pipeline.yml
+name: Release Pipeline
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+  build:
+    runs-on: ubuntu-latest
+    needs: checkout
+    steps:
+      - run: echo "Building release version"
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: echo "Running release tests"
+  package:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - run: echo "Packaging release"
+  publish:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+      - run: echo "Publishing release artifacts"
+  notify:
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - run: echo "Notify team of release"
